@@ -25,24 +25,24 @@ func FirstEndPoint(w http.ResponseWriter, r *http.Request) {
 	}
 	w.WriteHeader(http.StatusCreated)
 
-	shortUrl := app.Short(string(body))
+	shortURL := app.Short(string(body))
 
 	urlMapLock.Lock()
-	urlMap[shortUrl] = string(body)
+	urlMap[shortURL] = string(body)
 	urlMapLock.Unlock()
 
 	w.Header().Set("Content-Type", "text/plain")
-	fmt.Fprint(w, "http://localhost:8080/"+shortUrl)
+	fmt.Fprint(w, "http://localhost:8080/"+shortURL)
 }
 
 func SecondEndPoint(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	name := vars["id"]
 	urlMapLock.RLock()
-	originalUrl, ok := urlMap[name]
+	originalURL, ok := urlMap[name]
 	urlMapLock.RUnlock()
 	if ok {
-		http.Redirect(w, r, originalUrl, http.StatusTemporaryRedirect)
+		http.Redirect(w, r, originalURL, http.StatusTemporaryRedirect)
 	} else {
 		http.NotFound(w, r)
 	}
