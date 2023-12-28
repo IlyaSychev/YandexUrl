@@ -23,9 +23,6 @@ func FirstEndPoint(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		return
 	}
-	if r.Header.Get("Content-Type") != "text/plain" {
-		return
-	}
 	w.WriteHeader(http.StatusCreated)
 
 	shortUrl := app.Short(string(body))
